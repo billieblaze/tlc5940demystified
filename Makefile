@@ -14,12 +14,12 @@
 #                is connected.
 # FUSES ........ Parameters for avrdude to flash the fuses appropriately.
 
-#DEVICE     = atmega328p
-DEVICE     = atmega1284p
+DEVICE     = atmega328p
+#DEVICE     = atmega1284p
 #DEVICE     = atmega644p
-CLOCK      = 20000000
+#CLOCK      = 20000000
 #CLOCK      = 18432000
-#CLOCK      = 16000000
+CLOCK      = 16000000
 #CLOCK      = 8000000
 #CLOCK      = 1000000
 #PROGRAMMER = -c avrispmkII -P usb
@@ -43,8 +43,9 @@ FUSES      = -U hfuse:w:0xd9:m -U lfuse:w:0xa6:m
 
 # ---------- Begin TLC5940 Configuration Section ----------
 
+
 # Defines the number of TLC5940 chips that are connected in series
-TLC5940_N = 1
+TLC5940_N = 3
 
 # Flag for including functions for manually setting the dot correction
 #  0 = Do not include dot correction features (generates smaller code)
@@ -205,13 +206,13 @@ ifeq ($(TLC5940_USE_ROW_SHIFT_REGISTER), 1)
 # SCLK = Serial clock
 # Note: These options are ignored if TLC5940_USE_ROW_SHIFT_REGISTER = 0
 
-ROW_SIN_DDR = DDRC
-ROW_SIN_PORT = PORTC
-ROW_SIN_PIN = PC6
+ROW_SIN_DDR = DDRB
+ROW_SIN_PORT = PORTB
+ROW_SIN_PIN = PB5
 
-ROW_SCLK_DDR = DDRC
-ROW_SCLK_PORT = PORTC
-ROW_SCLK_PIN = PC7
+ROW_SCLK_DDR = DDRB
+ROW_SCLK_PORT = PORTB
+ROW_SCLK_PIN = PB4
 
 # This avoids adding needless defines if TLC5940_ENABLE_MULTIPLEXING = 0
 MULTIPLEXING_DEFINES = -DTLC5940_MULTIPLEX_N=$(TLC5940_MULTIPLEX_N) \
@@ -294,7 +295,6 @@ TLC5940_DEFINES = -DTLC5940_N=$(TLC5940_N) \
 
 # ---------- End TLC5940 Configuration Section ----------
 
-
 # Tune the lines below only if you know what you are doing:
 
 AVRDUDE    = avrdude $(PROGRAMMER) -p $(DEVICE)
@@ -333,7 +333,7 @@ install: flash fuse
 
 # if you use a bootloader, change the command below appropriately:
 load: all
-	bootloadHID main.hex
+	tsb com6:19200 fw main.hex
 
 clean:
 	rm -f main.hex main.elf $(OBJECTS)

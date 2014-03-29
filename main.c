@@ -31,6 +31,23 @@
 #include "tlc5940.h"
 #include "plasma.h"
 #include "scroll.h"
+#include "pixel.c"
+
+#define BLUE(x) (x+32)
+#define GREEN(x) (x+16)
+#define RED(x) (x)
+
+
+
+void drawPixel(int row, int col, int r, int g, int b) {
+		TLC5940_SetGS(row, RED(col), r);
+		TLC5940_SetGS(row, GREEN(col), g);
+		TLC5940_SetGS(row, BLUE(col), b);
+	
+		TLC5940_SetGSUpdateFlag();
+	
+}
+
 
 int main(void) {
   TLC5940_Init();
@@ -40,20 +57,6 @@ int main(void) {
   TLC5940_ClockInDC();
 #endif
 
-  /*
-  uint16_t color = 0;
-  // Make a nice gradient from red to green
-  for (uint8_t y = 0; y < TLC5940_MULTIPLEX_N; y++) {
-    for (uint8_t x = 0; x < numChannels / 2; x++) {
-      channel_t green = x * 2;
-      channel_t red = x * 2 + 1;
-      TLC5940_SetGS(y, green, color);
-      TLC5940_SetGS(y, red, (4095 - color)/4);
-      color += 64;
-    }
-  }
-  */
-
   // Manually clock in last set of values to be multiplexed
   TLC5940_ClockInGS();
 
@@ -61,7 +64,32 @@ int main(void) {
   sei();
 
   //do_plasma();
-  scroll(" Hello, world! I \x03 TLC5940. ");
-
+  //scroll(" Hello, world! I \x03 TLC5940. ");
+	
+	//int x = 0;
+	int y = 0;
+	
+	drawPixel(y,0,2048,0,0);
+	drawPixel(y,1,0,2048,0);
+	drawPixel(y,2,0,0,2048);
+	
+	drawPixel(2,12,4090,0,0);
+	drawPixel(3,12,0,4090,0);
+	drawPixel(4,12,0,0,4090);
+	
+	
+	drawPixel(4,15,4090,4090,0);
+	drawPixel(5,15,0,4090,4090);
+	drawPixel(6,15,4090,0,4090);
+	drawPixel(7,15,4090,4090,4090);
+	
+	for (;;) {
+		while(gsUpdateFlag);
+			
+		
+	}
+	
+  
   return 0;
 }
+

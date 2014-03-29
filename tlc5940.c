@@ -385,6 +385,7 @@ ISR(TIMER0_COMPA_vect) {
     else
       setLow(ROW_SIN_PORT, ROW_SIN_PIN);
     pulse(ROW_SCLK_PORT, ROW_SCLK_PIN);
+	
 #else
    MULTIPLEX_PIN = toggleRows[row]; // toggle two pins at once
 #endif

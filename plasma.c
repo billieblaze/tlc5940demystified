@@ -30,9 +30,9 @@
 #include <math.h>
 #include "tlc5940.h"
 #include "plasma.h"
-
-#define GREEN(x) ((x) * 2)
-#define RED(x) (((x) * 2)  + 1)
+#define BLUE(x) (x+32)
+#define GREEN(x) (x+16)
+#define RED(x) (x)
 
 float dist(float a, float b, float c, float d) {
   return sqrt((c-a)*(c-a)+(d-b)*(d-b));
@@ -43,7 +43,7 @@ void do_plasma() {
   float value;
   uint8_t x, y;
   uint8_t numRows = TLC5940_MULTIPLEX_N;
-  uint8_t numColumns = numChannels / 2;
+  uint8_t numColumns = numChannels / 3;
   uint16_t color = 0;
   for (;;) {
     while(gsUpdateFlag); // wait until we can modify gsData
@@ -55,11 +55,13 @@ void do_plasma() {
 	  + sin(dist(x, y, 192.0, 100.0) / 8.0);
         color = (uint16_t)(value * 4096) & 0xfff;
         if (color > 2047) {
+	  	  TLC5940_SetGS(y, BLUE(x),1024- color);
           TLC5940_SetGS(y, GREEN(x), color);
-          TLC5940_SetGS(y, RED(x), 4095 - color);
+          TLC5940_SetGS(y, RED(x), 4096 - color);
         } else {
+			TLC5940_SetGS(y, BLUE(x), 4096-color);
           TLC5940_SetGS(y, GREEN(x), 2047 - color);
-          TLC5940_SetGS(y, RED(x), 2048 + color);
+          TLC5940_SetGS(y, RED(x),   color);
         }
       }
     }
@@ -67,4 +69,3 @@ void do_plasma() {
     TLC5940_SetGSUpdateFlag();
   }
 }
-
