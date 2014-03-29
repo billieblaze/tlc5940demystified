@@ -1,31 +1,17 @@
-TLC5940 Demystified Library
-
 Based on Demystifying the TLC5940 - Chapter 9 by Matt Pandina
-
 Modified to use shift register for row multiplexing by J.B. Langston
+
+
+This is my fork of the projects mentioned above.   I plan to expand the main.c file to have a serial interface like the example
+in the arduino tlc5940 library.  I'm also using sparkfun's awesome RGB LED Button Pads, so I'm going to integrate button row scans
+with the led matrix. Last but not least, I hope to implement much of the functionalities of the Adafruit GFX library on top of this
+
+Note: JB Langston's project was setup to use 1 TLC5940, this one is setup to use 3 - one for each color.   I'm also using a 74HC164 
+to shift out row data which is then handed off to TLC59213 (clocked with the same SCLK as the 164)
 
 For more details, see these websites:
 
 http://adventuresinelectronics.blogspot.com/2012/02/my-led-matrix-needs-little-tlc.html
-
 http://sites.google.com/site/artcfox/demystifying-the-tlc5940
+http://thebillieblaze.blogspot.com
 
-Instructions:
-
-  1. Verify that DEVICE, CLOCK, PROGRAMMER, and FUSES are set
-     correctly in the Makefile based on your hardware. The provided
-     Makefile is configured for an ATmega328P running at 20 MHz,
-     using an AVR ISP mkII programmer, with FUSES set to remove the
-     clock divider, to use the external crystal, and to enable clock
-     output.
-
-     The COMPILE parameter is set to use the non-standard -mint8
-     option, so beware if you are add code that is incompatible with
-     -mint8 such as some functions that are part of avr-libc, and any
-     code that doesn't use the defines from <stdint.h>.
-
-  2. To build, type `make`
-
-  3. To set the fuse bits, type `make fuse`
-
-  4. To program the AVR, type `make flash`
